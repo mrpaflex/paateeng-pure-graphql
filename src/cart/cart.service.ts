@@ -8,6 +8,8 @@ import { User } from 'src/user/schema/user.schema';
 import { Product } from 'src/product/schema/product.schema';
 import { returnString } from 'src/common/return/return.input';
 
+
+
 @Injectable()
 export class CartService {
   constructor(
@@ -17,34 +19,45 @@ export class CartService {
     private addToCartModel: Model<AddToCart>,
   ) {}
 
-  async addToCart(addToCartInput: AddToCartInput, user: User):Promise<returnString> {
+  async addToCart(addToCartInput: AddToCartInput, user: User): Promise<returnString> {
+    const {items} = addToCartInput
+
     try {
       // Validate input
-      if (!addToCartInput || !addToCartInput.items || !user) {
+      if (!user) {
         throw new HttpException('Invalid input.', HttpStatus.BAD_REQUEST);
       }
 
-      // Check if the products exist
-      const productIds = addToCartInput.items.map(item => item.productid);
-      const products = await this.productModel.find({ _id: { $in: productIds } });
+      let cart: { productid: string; quantity: number }[] = []
 
-      // Check for product existence
-      if (products.length !== productIds.length) {
-        throw new HttpException('One or more products not found.', HttpStatus.NOT_FOUND);
+      for (const item of items) {
+        const products = await this.productModel.findOne({ _id: item.productid });
+  
+        if (!products) {
+          throw new HttpException(`Product with ID ${item.productid} not found`, HttpStatus.NOT_FOUND)
+        }
+  
+        cart.push({
+          productid: products._id.toString(),
+          quantity: item.quantity || 1,
+        });
+      };
+      
+      if (!cart || cart.length === 0) {
+       throw new HttpException('select product', HttpStatus.UNPROCESSABLE_ENTITY)
       }
+      
+      const createCart = await this.addToCartModel.create({
+        items: cart
+      })
 
-      // Create a new item in the cart
-      const addedToCart = await this.addToCartModel.create({
-        items: addToCartInput.items.map(item => ({
-          productid: item.productid,
-          quantity: item.quantity,
-        })),
-        userid: user._id,
-      });
+      console.log(createCart);
 
-      return {Response: `item added`};
+      return {
+        Response: 'Successfully added to caet'
+      };
+
     } catch (error) {
-      console.error(error);
       if (error instanceof HttpException) {
         throw error;
       }

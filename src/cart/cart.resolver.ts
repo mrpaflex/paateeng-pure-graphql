@@ -17,7 +17,6 @@ export class CartResolver {
 constructor(private cartService: CartService){}
 
 @Mutation(of => returnString)
-
 @UseGuards(GqlAuthGuard, RolesGuard)
 @Roles(Role.ADMIN, Role.USER, Role.MODERATOR)
 async addtoCart(@Args('addtocart') addtocartInput: AddToCartInput, @GetCurrentGqlUser() user: User ):Promise<returnString>{
@@ -25,4 +24,12 @@ async addtoCart(@Args('addtocart') addtocartInput: AddToCartInput, @GetCurrentGq
 
 }
 
+
+@Mutation(of=> returnString)
+@UseGuards(GqlAuthGuard, RolesGuard)
+@Roles(Role.ADMIN, Role.USER, Role.MODERATOR)
+async productPayment(){
+   
 }
+
+ }

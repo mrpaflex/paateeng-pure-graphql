@@ -1,15 +1,13 @@
 import { Field, InputType } from "@nestjs/graphql";
-import { IsInt, IsNotEmpty, Min } from "class-validator";
+import { IsNotEmpty } from "class-validator";
 
 @InputType()
 export class ProductQuantityInput {
-    @Field()
+    @Field(()=> [String])
     @IsNotEmpty()
-    productid: string;
+    productid: string[];
   
     @Field()
     @IsNotEmpty()
-    @IsInt()
-    @Min(1)
     quantity: number;
   }

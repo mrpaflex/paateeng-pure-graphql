@@ -53,7 +53,7 @@ export class UserService {
     async findalluser() {
         try {
             return await this.userModel.find({
-              deleted: false,
+              //deleted: false,
               suspended: false
             });  
         } catch (error) {

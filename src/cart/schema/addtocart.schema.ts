@@ -8,14 +8,10 @@ export class AddToCart extends Document{
 
     @Field(()=>String)
     _id?: mongoose.Types.ObjectId;
-    
-    @Field({nullable: true})
-    @Prop({default: 1})
-    quantity?: number
 
     @Field(()=>[String])
     @Prop()
-    items: string[]
+    items: object[]
 
     @Prop({ type: mongoose.Schema.Types.ObjectId, ref: 'User'})
     userid: mongoose.Types.ObjectId;

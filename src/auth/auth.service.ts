@@ -47,7 +47,7 @@ export class AuthService {
         //  console.log({token})
         //  return    token
          return {
-            Response: await this.jwtservice.sign(payload)
+            Response:  this.jwtservice.sign(payload)
          }
 
         }

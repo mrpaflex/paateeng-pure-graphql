@@ -13,9 +13,7 @@ export class GqlAuthGuard extends AuthGuard('jwt') {
     canActivate(context: ExecutionContext) {
         const ctx = GqlExecutionContext.create(context);
         const { req } = ctx.getContext();
-
-
-        return super.canActivate(
+        return super.canActivate( 
             new ExecutionContextHost([req]),
         );
     }
@@ -23,11 +21,11 @@ export class GqlAuthGuard extends AuthGuard('jwt') {
     handleRequest(err: any, user: any) {
      
         if (err || !user) {
-     
             throw err || new AuthenticationError('not authorized');   
     }
     
     return user;
+
     }
 
 
