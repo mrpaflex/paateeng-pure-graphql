@@ -10,11 +10,11 @@ export interface IinitializeTransaction{
     metadata?: Record<string, any>
 };
 
-export class Paystack{
+export class PayStack{
     API_URL= 'https://api.paystack.co';
     API_KEY= process.env.PAYMENT_SECRET;
 
-    async initializeTransaction(data: IinitializeTransaction){
+    async initializeTransaction(data: any){
         const myResponse = await axios.post(`${this.API_URL}/transaction/initialize`, data, {
             headers:{
                 Authorization: `Bearer  ${this.API_KEY}`,

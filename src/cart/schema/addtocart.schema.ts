@@ -2,6 +2,11 @@ import { Field, ObjectType } from "@nestjs/graphql";
 import { Prop, Schema, SchemaFactory } from "@nestjs/mongoose";
 import mongoose, { Document } from "mongoose";
 
+export interface CartItem {
+    productid: string;
+    quantity: number;
+  }
+
 @ObjectType()
 @Schema({timestamps:true})
 export class AddToCart extends Document{
@@ -11,7 +16,7 @@ export class AddToCart extends Document{
 
     @Field(()=>[String])
     @Prop()
-    items: object[]
+    items: CartItem[]
 
     @Prop({ type: mongoose.Schema.Types.ObjectId, ref: 'User'})
     userid: mongoose.Types.ObjectId;

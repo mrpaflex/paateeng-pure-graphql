@@ -1,4 +1,4 @@
-import { Args, Mutation, Resolver } from '@nestjs/graphql';
+import { Args, Mutation, Query, Resolver } from '@nestjs/graphql';
 import { CartService } from './cart.service';
 import { GqlAuthGuard } from 'src/auth/guards/graphql.guard';
 import { UseGuards } from '@nestjs/common';
@@ -25,11 +25,18 @@ async addtoCart(@Args('addtocart') addtocartInput: AddToCartInput, @GetCurrentGq
 }
 
 
-@Mutation(of=> returnString)
-@UseGuards(GqlAuthGuard, RolesGuard)
-@Roles(Role.ADMIN, Role.USER, Role.MODERATOR)
-async productPayment(){
-   
+
+
+@Query(returns => AddToCart)
+async confirmedOrder(@Args('id') id: string): Promise<any>{
+    return this.cartService.confirmedOrder(id)
 }
+
+// @Mutation(of=> returnString)
+// @UseGuards(GqlAuthGuard, RolesGuard)
+// @Roles(Role.ADMIN, Role.USER, Role.MODERATOR)
+// async initialPayment(){
+//    return await this.cartService.makePayment()
+// }
 
  }
