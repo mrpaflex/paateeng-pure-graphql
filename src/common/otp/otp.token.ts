@@ -1,25 +1,28 @@
 import * as crypto from 'crypto';
 
-export const sendotp = async (user)=>{
-    const emailtoken =crypto.randomBytes(8).toString('hex');
-    const emailtTokenExpirationTime = new Date()
-    emailtTokenExpirationTime.setDate(emailtTokenExpirationTime.getDate()+ 1);
-    
-    console.log(emailtoken)
-
-    user.emailConfirmedToken = emailtoken
-    user.emailTokenExpiration = emailtTokenExpirationTime
-    return user;
+// Function to generate random token
+const generateRandomToken = () => {
+  return crypto.randomBytes(8).toString('hex');
 };
 
-export const resetPasswordOtp = async (user)=>{
-    const generateResetToken = crypto.randomBytes(7).toString('hex');
+// Function to generate expiration time
+const generateTokenExpirationTime = () => {
+  const expirationTime = new Date();
+  expirationTime.setDate(expirationTime.getDate() + 1);
+  return expirationTime;
+};
 
-    console.log(generateResetToken)
-    const resetTokenExpiration = new Date();
-    resetTokenExpiration.setHours(resetTokenExpiration.getHours()+ 1);
-    
-    user.resetPasswordToken = generateResetToken;
-    user.resetTokenExpiration = resetTokenExpiration
-    return user;
-}
+export const sendOtp = {
+  token: generateRandomToken(),
+  tokenExpirationTime: generateTokenExpirationTime(),
+};
+
+export const resetPasswordOtp = async (user) => {
+  const generateResetToken = crypto.randomBytes(7).toString('hex');
+  const resetTokenExpiration = new Date();
+  resetTokenExpiration.setHours(resetTokenExpiration.getHours() + 1);
+
+  user.resetPasswordToken = generateResetToken;
+  user.resetTokenExpiration = resetTokenExpiration;
+  return user;
+};

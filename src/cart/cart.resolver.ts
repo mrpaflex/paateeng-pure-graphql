@@ -13,30 +13,27 @@ import { returnString } from 'src/common/return/return.input';
 
 @Resolver()
 export class CartResolver {
+  constructor(private cartService: CartService) {}
 
-constructor(private cartService: CartService){}
+  @Mutation((of) => returnString)
+  @UseGuards(GqlAuthGuard, RolesGuard)
+  @Roles(Role.ADMIN, Role.USER, Role.MODERATOR)
+  async addtoCart(
+    @Args('addtocart') addtocartInput: AddToCartInput,
+    @GetCurrentGqlUser() user: User,
+  ): Promise<returnString> {
+    return this.cartService.addToCart(addtocartInput, user);
+  }
 
-@Mutation(of => returnString)
-@UseGuards(GqlAuthGuard, RolesGuard)
-@Roles(Role.ADMIN, Role.USER, Role.MODERATOR)
-async addtoCart(@Args('addtocart') addtocartInput: AddToCartInput, @GetCurrentGqlUser() user: User ):Promise<returnString>{
-   return this.cartService.addToCart(addtocartInput, user)
+  @Query((returns) => AddToCart)
+  async confirmedOrder(@Args('id') id: string): Promise<any> {
+    return this.cartService.confirmedOrder(id);
+  }
 
+  // @Mutation(of=> returnString)
+  // @UseGuards(GqlAuthGuard, RolesGuard)
+  // @Roles(Role.ADMIN, Role.USER, Role.MODERATOR)
+  // async initialPayment(){
+  //    return await this.cartService.makePayment()
+  // }
 }
-
-
-
-
-@Query(returns => AddToCart)
-async confirmedOrder(@Args('id') id: string): Promise<any>{
-    return this.cartService.confirmedOrder(id)
-}
-
-// @Mutation(of=> returnString)
-// @UseGuards(GqlAuthGuard, RolesGuard)
-// @Roles(Role.ADMIN, Role.USER, Role.MODERATOR)
-// async initialPayment(){
-//    return await this.cartService.makePayment()
-// }
-
- }
